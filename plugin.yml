@@ -1,0 +1,6 @@
+name: Block Collapse
+main: me.jrl1004.java.blockcollapse.BlockCollapse
+version: 0.0.1
+author: JRL1004
+commands:
+  BlockCollapse:
