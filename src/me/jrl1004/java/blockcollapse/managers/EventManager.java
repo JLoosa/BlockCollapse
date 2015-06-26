@@ -1,5 +1,6 @@
-package me.jrl1004.java.blockcollapse;
+package me.jrl1004.java.blockcollapse.managers;
 
+import me.jrl1004.java.blockcollapse.BlockCollapse;
 import me.jrl1004.java.blockcollapse.games.Game;
 
 import org.bukkit.block.Block;

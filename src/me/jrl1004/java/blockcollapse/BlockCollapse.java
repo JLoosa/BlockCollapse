@@ -1,6 +1,7 @@
 package me.jrl1004.java.blockcollapse;
 
 import me.jrl1004.java.blockcollapse.managers.CommandManager;
+import me.jrl1004.java.blockcollapse.managers.EventManager;
 import me.jrl1004.java.blockcollapse.managers.GameManager;
 import me.jrl1004.java.blockcollapse.managers.MapManager;
 import me.jrl1004.java.blockcollapse.managers.ScoreManager;
