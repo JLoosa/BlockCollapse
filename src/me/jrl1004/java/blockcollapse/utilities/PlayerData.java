@@ -1,4 +1,4 @@
-package me.jrl1004.java.blockcollapse.utils;
+package me.jrl1004.java.blockcollapse.utilities;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -6,12 +6,12 @@ import org.bukkit.entity.Player;
 
 public class PlayerData {
 
-	private Player		player;
-	private Location	location;
-	private float		fallDistance;
-	private int			totalExp;
-	private int			foodLevel;
-	private GameMode	gameMode;
+	private Player player;
+	private Location location;
+	private float fallDistance;
+	private int totalExp;
+	private int foodLevel;
+	private GameMode gameMode;
 
 	public PlayerData(Player player) {
 		this.player = player;

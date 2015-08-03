@@ -1,71 +1,53 @@
 package me.jrl1004.java.blockcollapse;
 
-import me.jrl1004.java.blockcollapse.managers.CommandManager;
-import me.jrl1004.java.blockcollapse.managers.EventManager;
-import me.jrl1004.java.blockcollapse.managers.GameManager;
-import me.jrl1004.java.blockcollapse.managers.MapManager;
-import me.jrl1004.java.blockcollapse.managers.ScoreManager;
+import me.jrl1004.java.blockcollapse.commands.CommandManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class BlockCollapse extends JavaPlugin {
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
-	private MapManager		mapManager;
-	private GameManager		gameManager;
-	private ScoreManager	scoreManager;
-	private CommandManager	commandManager;
-	private EventManager	eventManager;
+public class BlockCollapse extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
 		HandlerList.unregisterAll(this);
+
 		super.onDisable();
 	}
 
 	@Override
 	public void onEnable() {
 		saveDefaultConfig();
-
-		//mapManager = new MapManager();
-		gameManager = new GameManager();
-		scoreManager = new ScoreManager();
-		commandManager = new CommandManager();
-		eventManager = new EventManager();
-
-		getCommand("BlockCollapse").setExecutor(commandManager);
-
-		Bukkit.getPluginManager().registerEvents(eventManager, this);
-
+		getCommand("BlockCollapse").setExecutor(new CommandManager());
 		super.onEnable();
 	}
 
-	public static BlockCollapse get() {
+	public static BlockCollapse getBlockCollapse() {
 		Plugin plugin = Bukkit.getPluginManager().getPlugin("BlockCollapse");
-		if (plugin instanceof BlockCollapse)
+		if (plugin instanceof BlockCollapse && plugin.isEnabled())
 			return (BlockCollapse) plugin;
 		return null;
 	}
 
-	public MapManager getMapManager() {
-		return mapManager;
+	public static WorldEditPlugin getWorldEdit() {
+		Plugin plugin = Bukkit.getPluginManager().getPlugin("WorldEdit");
+		if (plugin instanceof WorldEditPlugin && plugin.isEnabled())
+			return (WorldEditPlugin) plugin;
+		return null;
 	}
 
-	public GameManager getGameManager() {
-		return gameManager;
+	public static String getAdminPermissionNode() {
+		return getDefaultPermissionNode() + "admin.";
 	}
 
-	public ScoreManager getScoreManager() {
-		return scoreManager;
+	public static String getPlayerPermissionNode() {
+		return getDefaultPermissionNode() + "player.";
 	}
 
-	public CommandManager getCommandManager() {
-		return commandManager;
-	}
-
-	public EventManager getEventManager() {
-		return eventManager;
+	public static String getDefaultPermissionNode() {
+		return "BlockCollapse.";
 	}
 }

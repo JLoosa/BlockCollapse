@@ -1,4 +1,8 @@
-package me.jrl1004.java.blockcollapse.utils;
+package me.jrl1004.java.blockcollapse.utilities;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.server.v1_8_R2.AxisAlignedBB;
 import net.minecraft.server.v1_8_R2.Block;
@@ -7,13 +11,36 @@ import net.minecraft.server.v1_8_R2.Entity;
 import net.minecraft.server.v1_8_R2.EntityPlayer;
 import net.minecraft.server.v1_8_R2.World;
 
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class NMSTools {
+
 	private NMSTools() {
+	}
+
+	public static org.bukkit.block.Block[] getSupportingBlocks(Player player) {
+		final AxisAlignedBB playerBB = NMSTools.getEntityBoundingBox(NMSTools.getPlayerHandle(player)).grow(0, 0.15, 0); // So I don't accidentally reassign it
+		Map<org.bukkit.block.Block, AxisAlignedBB> blockBoxes = new HashMap<org.bukkit.block.Block, AxisAlignedBB>();
+		ArrayList<org.bukkit.block.Block> supportingBlocks = new ArrayList<org.bukkit.block.Block>();
+		// Starting at the lowest corner and iterating up
+		final Location cornerLoc = player.getLocation().add(-1, -1, -1);
+		for (int x = 0; x < 3; x++) {
+			for (int z = 0; z < 3; z++) {
+				org.bukkit.block.Block block = cornerLoc.clone().add(x, 0, z).getBlock();
+				if (block.getType() != Material.AIR) // You can't stand on air... normally
+				blockBoxes.put(block, NMSTools.getBlockBoundingBox(block));
+			}
+		}
+		if (blockBoxes.isEmpty()) return new org.bukkit.block.Block[0]; // This player is literally a wizard
+		for (org.bukkit.block.Block aabb : blockBoxes.keySet()) {
+			if (playerBB.b(blockBoxes.get(aabb))) supportingBlocks.add(aabb);
+		}
+		return supportingBlocks.toArray(new org.bukkit.block.Block[supportingBlocks.size()]);
 	}
 
 	public static Entity getEntityHandle(org.bukkit.entity.Entity entity) {
@@ -52,5 +79,4 @@ public class NMSTools {
 		AxisAlignedBB boundingBox = nmsBlock.a(getNMSWorld(block.getWorld()), blockPosition, nmsBlock.getBlockData());
 		return boundingBox;
 	}
-
 }
