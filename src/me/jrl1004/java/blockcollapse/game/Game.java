@@ -71,7 +71,6 @@ public class Game {
 		this.running = true;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void endGame() {
 		running = false;
 		for (Player p : players.keySet()) {
@@ -79,6 +78,11 @@ public class Game {
 			players.get(p).wipeData();
 		}
 		players.clear();
+		resetMap();
+	}
+
+	@SuppressWarnings("deprecation")
+	public void resetMap() {
 		while (!regenQueue.isEmpty()) {
 			BlockState state = regenQueue.pop();
 			state.getBlock().setTypeIdAndData(state.getTypeId(), state.getRawData(), false);
@@ -95,6 +99,8 @@ public class Game {
 			markedBlocks.clear();
 		}
 		for (Player player : players.keySet()) {
+			if (!playArea.contains(player.getLocation()))
+				player.teleport(teleportLocation);
 			if (!((Entity) player).isOnGround()) continue;
 			Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
 			if (block.getType() == Material.AIR) {
@@ -111,7 +117,15 @@ public class Game {
 
 	public void addPlayer(Player player) {
 		players.put(player, new PlayerData(player));
+		players.get(player).setToGameDefaults();
 		messagePlayers(player.getName() + " has joined the game");
+		if (getPlayers().size() >= 2 && !isRunning()) {
+			try {
+				startGame();
+			} catch (GameException e) {
+				messagePlayers("Could not start game: [GameException] " + e.getMessage());
+			}
+		}
 	}
 
 	private void messagePlayers(String... message) {
@@ -151,7 +165,8 @@ public class Game {
 		return gameName;
 	}
 
-	public void setGameName(String gameName) {
+	public void setGameName(String gameName) throws GameException {
+		if (GameManager.getGameManager().getByName(gameName) != null) throw new GameException("A game by that name already exists");
 		this.gameName = gameName;
 	}
 
@@ -175,7 +190,7 @@ public class Game {
 	}
 
 	public String getIdentifier() {
-		if (getGameName() != null && getGameName().length() > 0) return "\"" + getGameName() + "\"";
-		return getId() + "";
+		if (getGameName() != null && getGameName().length() > 0) return getGameName();
+		return "[UNNAMED]";
 	}
 }

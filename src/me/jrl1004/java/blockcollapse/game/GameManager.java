@@ -1,11 +1,13 @@
 package me.jrl1004.java.blockcollapse.game;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import me.jrl1004.java.blockcollapse.BlockCollapse;
+import me.jrl1004.java.blockcollapse.utilities.ConfigurationUtils;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -95,5 +97,15 @@ public class GameManager {
 			i = -1;
 		}
 		return i;
+	}
+
+	public void loadSavedGames() {
+		File gameFolder = ConfigurationUtils.getSaveFolder();
+		File[] gameFiles = gameFolder.listFiles();
+		if (gameFiles.length == 0) return;
+		for (File file : gameFiles) {
+			Game game = new Game(games.size(), file);
+			games.add(game);
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package me.jrl1004.java.blockcollapse;
 
 import me.jrl1004.java.blockcollapse.commands.CommandManager;
+import me.jrl1004.java.blockcollapse.game.GameManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
@@ -22,6 +23,7 @@ public class BlockCollapse extends JavaPlugin {
 	public void onEnable() {
 		saveDefaultConfig();
 		getCommand("BlockCollapse").setExecutor(new CommandManager());
+		GameManager.getGameManager().loadSavedGames();
 		super.onEnable();
 	}
 

@@ -4,3 +4,4 @@ version: 0.0.3
 author: JRL1004
 commands:
   BlockCollapse:
+    aliases: [bc]

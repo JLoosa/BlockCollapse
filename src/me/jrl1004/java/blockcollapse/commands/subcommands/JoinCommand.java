@@ -29,6 +29,10 @@ public class JoinCommand extends SubCommand {
 			playerOnly(sender);
 			return;
 		}
+		if (args.length < getCmdParams().length) {
+			missingArguments(sender);
+			return;
+		}
 		Player player = (Player) sender;
 		if (GameManager.getGameManager().getPlayerGame(player) != null) {
 			MessageManager.messagePrefixed(sender, "You are already in a game");

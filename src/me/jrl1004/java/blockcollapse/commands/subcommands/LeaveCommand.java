@@ -16,7 +16,7 @@ public class LeaveCommand extends SubCommand {
 		setPermNode("");
 		setUsage(getDefaultUsage());
 	}
-	
+
 	@Override
 	public void onCommand(CommandSender sender, String[] args) {
 		if (!isPlayer(sender)) {
@@ -24,10 +24,9 @@ public class LeaveCommand extends SubCommand {
 			return;
 		}
 		Player player = (Player) sender;
-		Game game =GameManager.getGameManager().getPlayerGame(player);
-		if(game != null) {
+		Game game = GameManager.getGameManager().getPlayerGame(player);
+		if (game != null) {
 			game.removePlayer(player);
-			MessageManager.messagePrefixed(player, "You have left the game");
 			return;
 		}
 		else {
