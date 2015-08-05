@@ -71,7 +71,7 @@ public class GameCommand extends SubCommand {
 
 	private void startGame(Player player, Game game) {
 		try {
-			game.startGame();
+			game.startGame(true);
 			MessageManager.messagePrefixed(player, "Game started");
 		} catch (GameException e) {
 			MessageManager.messagePrefixed(player, "Failed to start game: [GameException] " + e.getMessage());

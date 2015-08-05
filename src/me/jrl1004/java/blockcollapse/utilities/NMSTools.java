@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.server.v1_8_R2.AxisAlignedBB;
-import net.minecraft.server.v1_8_R2.Block;
-import net.minecraft.server.v1_8_R2.BlockPosition;
-import net.minecraft.server.v1_8_R2.Entity;
-import net.minecraft.server.v1_8_R2.EntityPlayer;
-import net.minecraft.server.v1_8_R2.World;
+import net.minecraft.server.v1_8_R3.AxisAlignedBB;
+import net.minecraft.server.v1_8_R3.Block;
+import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_8_R3.Entity;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.World;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class NMSTools {

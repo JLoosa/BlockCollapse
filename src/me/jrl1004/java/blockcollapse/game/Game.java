@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
+import me.jrl1004.java.blockcollapse.BlockCollapse;
 import me.jrl1004.java.blockcollapse.utilities.BCConfig;
 import me.jrl1004.java.blockcollapse.utilities.GameConfig;
 import me.jrl1004.java.blockcollapse.utilities.GameException;
@@ -17,6 +18,7 @@ import me.jrl1004.java.blockcollapse.utilities.NMSTools;
 import me.jrl1004.java.blockcollapse.utilities.PlayerData;
 
 import org.apache.commons.lang3.Validate;
+import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -78,12 +80,12 @@ public class Game {
 
 	// Game Methods
 
-	public void startGame() throws GameException {
+	public void startGame(boolean force) throws GameException {
 		if (id == -1) throw new GameException("Game ID must be a non-negative integer");
 		if (playArea == null) throw new GameException("Game does not yet have a valid play area");
 		if (teleportLocation == null) throw new GameException("Game does not have a valid spawn location");
 		if (!playArea.contains(teleportLocation)) throw new GameException("Game spawn point is not within the arena!");
-		state = GameState.LOBBY;
+		state = force ? GameState.GRACE : GameState.LOBBY;
 	}
 
 	private int $currentTick = 0;
@@ -182,7 +184,11 @@ public class Game {
 	// Player Control
 
 	public void addPlayer(Player player) {
-		if (getPlayers().size() >= maxPlayers) {
+		if (state != GameState.LOBBY && !player.hasPermission(BlockCollapse.getAdminPermissionNode())) {
+			MessageManager.messagePrefixed(player, "This game is not currently in a joinable state");
+			return;
+		}
+		if (getPlayers().size() >= maxPlayers && !player.hasPermission(BlockCollapse.getAdminPermissionNode())) {
 			MessageManager.messagePrefixed(player, "This game is full");
 			return;
 		}
@@ -262,5 +268,12 @@ public class Game {
 	public String getIdentifier() {
 		if (getGameName() != null && getGameName().length() > 0) return getGameName();
 		return "[UNNAMED]-" + getId();
+	}
+
+	public ChatColor getAppropriateColor(int ingame, int max) {
+		ChatColor[] colors = { ChatColor.DARK_GREEN, ChatColor.GREEN, ChatColor.YELLOW, ChatColor.GOLD, ChatColor.RED, ChatColor.DARK_RED };
+		double percent = ingame / max;
+		int c = (int) (percent * (colors.length - 1));
+		return colors[c];
 	}
 }

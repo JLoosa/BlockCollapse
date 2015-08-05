@@ -8,6 +8,7 @@ import java.util.Set;
 
 import me.jrl1004.java.blockcollapse.BlockCollapse;
 import me.jrl1004.java.blockcollapse.utilities.GameConfig;
+import me.jrl1004.java.blockcollapse.utilities.GameException;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -110,6 +111,10 @@ public class GameManager {
 		if (gameFiles.length == 0) return;
 		for (File file : gameFiles) {
 			Game game = new Game(games.size(), file);
+			try {
+				game.startGame(false);
+			} catch (GameException e) {
+			}
 			games.add(game);
 			System.out.println("Game " + game.getIdentifier() + " has been loaded");
 		}
