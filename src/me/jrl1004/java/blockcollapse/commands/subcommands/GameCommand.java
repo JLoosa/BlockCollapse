@@ -65,7 +65,7 @@ public class GameCommand extends SubCommand {
 	}
 
 	private void stopGame(Player player, Game game) {
-		game.endGame();
+		game.endGame(null);
 		MessageManager.messagePrefixed(player, "Game force-ended");
 	}
 

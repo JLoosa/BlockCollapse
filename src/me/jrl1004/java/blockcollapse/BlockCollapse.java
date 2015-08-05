@@ -2,6 +2,7 @@ package me.jrl1004.java.blockcollapse;
 
 import me.jrl1004.java.blockcollapse.commands.CommandManager;
 import me.jrl1004.java.blockcollapse.game.GameManager;
+import me.jrl1004.java.blockcollapse.utilities.BCConfig;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
@@ -15,15 +16,25 @@ public class BlockCollapse extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		HandlerList.unregisterAll(this);
-
+		GameManager.getGameManager().unloadGames();
+		saveConfig();
 		super.onDisable();
 	}
 
 	@Override
 	public void onEnable() {
-		saveDefaultConfig();
+		if (getConfig() == null)
+			saveResource("config.yml", true);
+		if (getConfig().getBoolean("use-config")) {
+			if (getConfig().getBoolean("reset-config")) {
+				saveResource("config.yml", true);
+				getConfig().set("reset-config", false);
+			}
+			BCConfig.loadData(getConfig());
+		}
 		getCommand("BlockCollapse").setExecutor(new CommandManager());
 		GameManager.getGameManager().loadSavedGames();
+		GameManager.getGameManager().startTicks();
 		super.onEnable();
 	}
 
@@ -50,6 +61,6 @@ public class BlockCollapse extends JavaPlugin {
 	}
 
 	public static String getDefaultPermissionNode() {
-		return "BlockCollapse.";
+		return "blockcollapse.";
 	}
 }

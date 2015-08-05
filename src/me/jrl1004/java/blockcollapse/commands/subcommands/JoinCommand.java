@@ -43,6 +43,7 @@ public class JoinCommand extends SubCommand {
 			MessageManager.messagePrefixed(sender, "Game could not be found");
 			return;
 		}
+		MessageManager.messagePrefixed(sender, "Joining game " + game.getIdentifier());
 		game.addPlayer(player);
 	}
 

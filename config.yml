@@ -1,2 +1,26 @@
-#GetRektM9
-use-config: false
+#Should the plugin use this configuration file or run using the defaults
+use-config: true
+
+# Should we reset this config to its default state?
+reset-config: true
+
+# What would you like BlockCollapse to prefix itself as in the chat?
+# Chat Colors are not currently supported without using ''
+chat-prefix: '&6[&cBlockCollapse&6] &a'
+
+# How many ticks should the game wait before breaking
+# the blocks below the player's feet?
+block-break-speed: 5
+
+# How many players should we allow into each game?
+max-players-per-game: 8
+
+# How many seconds should the game stay in "lobby" after it is allowed to start?
+# During "lobby" time, other players may join the game (MUST HAVE A DECIMAL)
+lobby-time: 30.0
+
+# How many seconds should the game have for a "grace" period? In this time, players can move
+# but the blocks beneath their feet will not be removed (MUST HAVE A DECIMAL)
+grace-period: 5.0
+
+

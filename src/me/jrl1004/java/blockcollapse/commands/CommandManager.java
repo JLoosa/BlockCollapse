@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import me.jrl1004.java.blockcollapse.commands.subcommands.CreateCommand;
+import me.jrl1004.java.blockcollapse.commands.subcommands.GameCommand;
 import me.jrl1004.java.blockcollapse.commands.subcommands.JoinCommand;
 import me.jrl1004.java.blockcollapse.commands.subcommands.LeaveCommand;
 import me.jrl1004.java.blockcollapse.commands.subcommands.SaveCommand;
@@ -17,7 +18,7 @@ import org.bukkit.command.CommandSender;
 
 public class CommandManager implements CommandExecutor {
 
-	private List<SubCommand> commands = Arrays.asList(new CreateCommand(), new JoinCommand(), new LeaveCommand(), new SetCommand(), new SaveCommand());
+	private List<SubCommand> commands = Arrays.asList(new CreateCommand(), new JoinCommand(), new LeaveCommand(), new SetCommand(), new SaveCommand(), new GameCommand());
 
 	@Override
 	public boolean onCommand(CommandSender _sender, Command _command, String _label, String[] args) {

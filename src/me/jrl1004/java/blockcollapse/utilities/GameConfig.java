@@ -14,7 +14,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldedit.bukkit.selections.Selection;
 
-public class ConfigurationUtils {
+public class GameConfig {
 
 	private final static String key_WORLD = "World";
 	private final static String key_PA_MIN = "Locations.PlayAreaMin";
@@ -24,7 +24,7 @@ public class ConfigurationUtils {
 
 	private final static String key_SPLIT = ":";
 
-	private ConfigurationUtils() {
+	private GameConfig() {
 	}
 
 	public static Selection getPlayArea(YamlConfiguration config) {
@@ -47,11 +47,8 @@ public class ConfigurationUtils {
 	private static String Loc2Str(Location loc, boolean useWorld) {
 		String world = loc.getWorld().getName();
 		String x = (loc.getX() + "");
-		x = x.substring(0, x.indexOf(".") + 2);
-		String y = (loc.getX() + "");
-		y = y.substring(0, y.indexOf(".") + 2);
-		String z = (loc.getX() + "");
-		z = z.substring(0, z.indexOf(".") + 2);
+		String y = (loc.getY() + "");
+		String z = (loc.getZ() + "");
 		return world + key_SPLIT + x + key_SPLIT + y + key_SPLIT + z;
 	}
 
@@ -70,17 +67,18 @@ public class ConfigurationUtils {
 	}
 
 	public static void saveGameToFile(Game game) throws IOException {
-		File gameFile = new File(getSaveFolder(), game.getGameName());
-		if (!gameFile.exists()) gameFile.createNewFile();
+		File gameFile = new File(getSaveFolder(), game.getGameName() + ".yml");
+		if (gameFile.exists()) gameFile.delete();
+		gameFile.createNewFile();
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(gameFile);
 		config.set(key_NAME, game.getGameName());
-		config.set(key_WORLD, game.getTeleportLocation().getWorld());
+		config.set(key_WORLD, game.getTeleportLocation().getWorld().getName());
 		config.set(key_SPAWN, Loc2Str(game.getTeleportLocation()));
 		config.set(key_PA_MAX, Loc2Str(game.getPlayArea().getMaximumPoint(), true));
 		config.set(key_PA_MIN, Loc2Str(game.getPlayArea().getMinimumPoint(), true));
 		config.save(gameFile);
 	}
-	
+
 	public static File getSaveFolder() {
 		File saveFolder = new File(BlockCollapse.getBlockCollapse().getDataFolder(), "Games");
 		if (!saveFolder.exists()) saveFolder.mkdirs();

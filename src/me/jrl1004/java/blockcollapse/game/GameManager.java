@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import me.jrl1004.java.blockcollapse.BlockCollapse;
-import me.jrl1004.java.blockcollapse.utilities.ConfigurationUtils;
+import me.jrl1004.java.blockcollapse.utilities.GameConfig;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -67,16 +67,21 @@ public class GameManager {
 		return game;
 	}
 
+	private boolean cancelTask = false;
+
 	public void startTicks() {
 		new BukkitRunnable() {
 			public void run() {
+				if (cancelTask == true) {
+					cancel();
+					return;
+				}
 				if (getGames().isEmpty()) return;
 				for (Game game : getGames()) {
-					if (!game.isRunning()) continue;
 					game.gameTick();
 				}
 			}
-		}.runTaskTimer(BlockCollapse.getBlockCollapse(), 0, 5);
+		}.runTaskTimer(BlockCollapse.getBlockCollapse(), 0, 1);
 	}
 
 	public Game getFromString(String string) {
@@ -100,12 +105,25 @@ public class GameManager {
 	}
 
 	public void loadSavedGames() {
-		File gameFolder = ConfigurationUtils.getSaveFolder();
+		File gameFolder = GameConfig.getSaveFolder();
 		File[] gameFiles = gameFolder.listFiles();
 		if (gameFiles.length == 0) return;
 		for (File file : gameFiles) {
 			Game game = new Game(games.size(), file);
 			games.add(game);
+			System.out.println("Game " + game.getIdentifier() + " has been loaded");
 		}
+	}
+
+	public void endAllGames() {
+		cancelTask = true;
+		if (getGames().isEmpty()) return;
+		for (Game g : getGames())
+			g.endGame(null);
+	}
+
+	public void unloadGames() {
+		endAllGames();
+		games.clear();
 	}
 }
