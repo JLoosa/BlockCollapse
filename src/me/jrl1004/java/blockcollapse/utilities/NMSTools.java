@@ -23,6 +23,11 @@ public class NMSTools {
 	private NMSTools() {
 	}
 
+	public static Entity getEntityHandle(org.bukkit.entity.Entity entity) {
+		if (entity instanceof CraftEntity) ((CraftEntity) entity).getHandle();
+		return null;
+	}
+
 	public static org.bukkit.block.Block[] getSupportingBlocks(Player player) {
 		final AxisAlignedBB playerBB = NMSTools.getEntityBoundingBox(NMSTools.getPlayerHandle(player)).grow(0, 0.15, 0); // So I don't accidentally reassign it
 		Map<org.bukkit.block.Block, AxisAlignedBB> blockBoxes = new HashMap<org.bukkit.block.Block, AxisAlignedBB>();
@@ -41,11 +46,6 @@ public class NMSTools {
 			if (playerBB.b(blockBoxes.get(aabb))) supportingBlocks.add(aabb);
 		}
 		return supportingBlocks.toArray(new org.bukkit.block.Block[supportingBlocks.size()]);
-	}
-
-	public static Entity getEntityHandle(org.bukkit.entity.Entity entity) {
-		if (entity instanceof CraftEntity) ((CraftEntity) entity).getHandle();
-		return null;
 	}
 
 	public static EntityPlayer getPlayerHandle(Player player) {
