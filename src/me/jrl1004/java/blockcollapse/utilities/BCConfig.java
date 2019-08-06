@@ -4,52 +4,33 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class BCConfig {
+    private static BCConfig instance;
 
-	private BCConfig() {
-	}
+    public static BCConfig create(FileConfiguration fileConfiguration) {
+	return new BCConfig(fileConfiguration);
+    }
 
-	private static String chatPrefix = "[BlockCollapse]";
+    public static BCConfig get() {
+	return instance;
+    }
 
-	public static String getChatPrefix() {
-		return chatPrefix;
-	}
+    public final String chatPrefix;
+    public final int tickDelay;
+    public final int maxPlayers;
+    public final int minPlayers;
+    public final int lobbyTime;
+    public final int gracePeriod;
 
-	private static int tickDelay = 3;
-
-	public static int getTickDelay() {
-		return tickDelay;
-	}
-
-	private static int maxPlayers = 8;
-
-	public static int getMaxPlayers() {
-		return maxPlayers;
-	}
-
-	private static int lobbyTime = 30 * 20;
-
-	public static int getLobbyTime() {
-		return lobbyTime;
-	}
-
-	private static int gracePeriod = 5 * 20;
-
-	public static int getGracePeriod() {
-		return gracePeriod;
-	}
-
-	public static void loadData(FileConfiguration fileConfiguration) {
-		if (fileConfiguration == null) return;
-		Object prefix = fileConfiguration.get("chat-prefix");
-		if (prefix != null) chatPrefix = ChatColor.translateAlternateColorCodes('&', (String) prefix);
-		Object ticks = fileConfiguration.get("block-break-speed");
-		if (ticks != null) tickDelay = (int) ticks;
-		Object players = fileConfiguration.get("max-players-per-game");
-		if (players != null) maxPlayers = (int) players;
-		Object lobby = fileConfiguration.get("lobby-time");
-		if (lobby != null) lobbyTime = (int) (((double) lobby) * 20);
-		Object grace = fileConfiguration.get("grace-period");
-		if (grace != null) gracePeriod = (int) (((double) grace) * 20);
-	}
-
+    private BCConfig(FileConfiguration fileConfiguration) {
+	if (fileConfiguration == null)
+	    throw new IllegalArgumentException("Config file may not be null!");
+	String tempChatPrefix = fileConfiguration.getString("chat-prefix", "&a[BlockCollapse] &r");
+	chatPrefix = ChatColor.translateAlternateColorCodes('&', tempChatPrefix);
+	tickDelay = fileConfiguration.getInt("block-break-speed", 3);
+	maxPlayers = fileConfiguration.getInt("max-players-per-game", 8);
+	minPlayers = fileConfiguration.getInt("min-players-per-game", 2);
+	lobbyTime = fileConfiguration.getInt("lobby-time", 30) * 20;
+	gracePeriod = fileConfiguration.getInt("grace-period", 5) * 20;
+	instance = this;
+    }
 }

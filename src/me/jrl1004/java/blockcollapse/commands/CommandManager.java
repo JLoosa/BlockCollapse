@@ -17,26 +17,26 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class CommandManager implements CommandExecutor {
+    private List<SubCommand> commands = Arrays.asList(new CreateCommand(), new JoinCommand(), new LeaveCommand(), new SetCommand(), new SaveCommand(), new GameCommand());
 
-	private List<SubCommand> commands = Arrays.asList(new CreateCommand(), new JoinCommand(), new LeaveCommand(), new SetCommand(), new SaveCommand(), new GameCommand());
-
-	@Override
-	public boolean onCommand(CommandSender _sender, Command _command, String _label, String[] args) {
-		if (!_command.getName().equalsIgnoreCase("blockcollapse")) return false;
-		if (args.length == 0) {
-			MessageManager.messagePrefixed(_sender, "/BlockCollapse <Command> (Params)");
-			MessageManager.messagePrefixed(_sender, "Current commands are: ");
-			for (SubCommand sc : commands)
-				MessageManager.messageWithPrefix(_sender, ChatColor.AQUA + " -> ", sc.getName());
-			return true;
-		}
-		for (SubCommand sc : commands) {
-			if (sc.isCommand(args[0])) {
-				sc.onCommand(_sender, sc.removeFirst(args));
-				return true;
-			}
-		}
-		MessageManager.messagePrefixed(_sender, "Command not found");
-		return true;
+    @Override
+    public boolean onCommand(CommandSender _sender, Command _command, String _label, String[] args) {
+	if (!_command.getName().equalsIgnoreCase("blockcollapse"))
+	    return false;
+	if (args.length == 0) {
+	    MessageManager.messagePrefixed(_sender, "/BlockCollapse <Command> (Params)");
+	    MessageManager.messagePrefixed(_sender, "Current commands are: ");
+	    for (SubCommand sc : commands)
+		MessageManager.messageWithPrefix(_sender, ChatColor.AQUA + " -> ", sc.getName());
+	    return true;
 	}
+	for (SubCommand sc : commands) {
+	    if (sc.isCommand(args[0])) {
+		sc.onCommand(_sender, sc.removeFirst(args));
+		return true;
+	    }
+	}
+	MessageManager.messagePrefixed(_sender, "Command not found");
+	return true;
+    }
 }
